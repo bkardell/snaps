@@ -68,6 +68,11 @@ If you do not provide the "expected" property (as in the sample in this repo) it
 ```
 
 
+Which browser will it use?
+=========================
+
+Currently it will use Firefox.  Why?  Because the prollyfills I am testing are about selectors and they will work the same way with others and, like I said, I just wrote it this morning.  Give me some time, we can add others :)
+
 
 
 

@@ -78,16 +78,9 @@ Running tests for: chrome
 1 of 1 passed.
 ```
 
-JSON Structure
+JSON Structure Explained
 ==============
-<<<<<<< HEAD
-The json has two properties, an array of browser names to test against and an array of tests.
-Each test is an object, the only required thing is the path to the test itself (file protocol is just fine).
-If you do not provide the "expected" property (as in the sample in this repo) it will look for "-expected.html" in the same place.
 
-```
-{
-=======
 The json has three properties, the first two are optional:
 * capture_path is a path where to capture snapshots to during testing. If not provided, snapshots aren't saved.
 * browsers is an array of browser names to test against and an array of tests.  If not provided, it defaults to firefox.  Valid values are: firefox, chrome (see below), opera, safari, and msie (see below).
@@ -96,7 +89,6 @@ The json has three properties, the first two are optional:
 ```
 {
   "capture_path": "/path/to/capture/images/",
->>>>>>> Adding capturability and default browser
   "browsers": ["firefox", "safari", "opera" ],
   "tests": [
     {

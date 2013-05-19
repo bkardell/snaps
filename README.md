@@ -48,6 +48,31 @@ $ java -jar Snaps-1.0-SNAPSHOT.jar /full/path/to/reftests.json
 That's it... it will output some stuff to the command line and let you know what's up.  For example, the sample one provided will output:
 
 ```
+-----------------------------------
+Running tests for: firefox
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html
+1 of 1 passed.
+May 19, 2013 6:10:07 PM org.openqa.selenium.safari.SafariDriverServer start
+INFO: Server started on port 43212
+May 19, 2013 6:10:08 PM org.openqa.selenium.safari.SafariDriverChannelHandler$1 operationComplete
+INFO: Connection opened
+-----------------------------------
+Running tests for: safari
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html
+1 of 1 passed.
+-----------------------------------
+Running tests for: opera
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html
+1 of 1 passed.
+Started ChromeDriver
+port=45546
+version=0.8
+log=/Users/bkardell/projects/java/snaps/target/chromedriver.log
+-----------------------------------
+Running tests for: chrome
 ...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html
 ...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html
 1 of 1 passed.
@@ -55,24 +80,34 @@ That's it... it will output some stuff to the command line and let you know what
 
 JSON Structure
 ==============
-It's just an array of objects - each one representing a test.  The only required thing is the test itself (file protocol is just fine).
+The json has two properties, an array of browser names to test against and an array of tests.
+Each test is an object, the only required thing is the path to the test itself (file protocol is just fine).
 If you do not provide the "expected" property (as in the sample in this repo) it will look for "-expected.html" in the same place.
 
 ```
-[
-  {
-    "test": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html",
-    "expected": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html"
-  }
-]
+{
+  "browsers": ["firefox", "safari", "opera" ],
+  "tests": [
+    {
+      "test": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html",
+      "expected": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html"
+    }
+  ]
+}
 ```
 
 
-Which browser will it use?
+A note about browsers
 =========================
+If you want to run chrome (or msie) you'll have a bit more to do.  For chrome, you'll have to [download the appropriate driver](https://code.google.com/p/chromedriver/downloads/list) and then set 
+a property:
 
-Currently it will use Firefox.  Why?  Because the prollyfills I am testing are about selectors and they will work the same way with others and, like I said, I just wrote it this morning.  Give me some time, we can add others :)
+```
+java -Dwebdriver.chrome.driver=/full/path/to/chromedriver2_mac32_0.8/chromedriver -jar Snaps-1.0-SNAPSHOT.jar  /full/path/to/reftests.json
+```
 
+Unfortunately, I don't have a PC handy, so the code support is there for MSIE, but I dont have testable instructions on how to set up the driver.  If you
+want to send me a pull - much appreciated.
 
 
 

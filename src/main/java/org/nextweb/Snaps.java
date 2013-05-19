@@ -2,9 +2,7 @@ package org.nextweb;
 
 import com.opera.core.systems.OperaDriver;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,10 +11,14 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.*;
 
 public class Snaps {
+
+    private static int ct=0;
+    private static int delay=1000;
+    private static String capturePath;
+
     private static WebDriver getDriver(String name){
         if(name.equalsIgnoreCase("firefox")){
             return new FirefoxDriver();
@@ -34,7 +36,7 @@ public class Snaps {
     }
 
 
-    public static byte[] getScreenshot(WebDriver driver, String url, int delay) throws Exception {
+    public static byte[] getScreenshot(WebDriver driver, String url) throws Exception {
         System.out.println("...fetching " + url);
         driver.get(url);
         Thread.sleep(delay);
@@ -59,18 +61,26 @@ public class Snaps {
                     JSONObject o = (JSONObject) entries.get(i);
                     String test = "... test undefined...";
                     try{
-                        test = o.get("test").toString();
+                        test = o.getString("test");
                         String expected = test.replace(".html", "-expected.html");
                         if(o.has("expected")){
-                            expected = o.get("expected").toString();
+                            expected = o.getString("expected");
                         }
-                        byte[] a = getScreenshot(driver, test , delay);
-                        byte[] b = getScreenshot(driver, expected, delay);
-                        boolean areEqual = ArrayUtils.isEquals(a, b);
+                        byte[] a = getScreenshot(driver, test);
+                        byte[] b = getScreenshot(driver, expected);
+
+                        if(capturePath != null){
+                            ct++;
+                            FileUtils.writeByteArrayToFile(new File(capturePath + "/" + (ct) + "-test.png"), a);
+                            FileUtils.writeByteArrayToFile(new File(capturePath + "/" +  (ct) + "-expected.png"), b);
+                        }
+
+                        boolean areEqual = java.util.Arrays.equals(a, b);
                         if(areEqual){
                             passing.add(test);
                         }else{
                             failing.add(test);
+                            System.out.println("fail!");
                         }
 
                     } catch( Exception e ){
@@ -97,17 +107,24 @@ public class Snaps {
             System.out.println("Provide a properties file ...");
         }else{
             List browsers = new ArrayList();
-            int delay = 1000;
-            if(System.getenv("delay") != null){
-                delay = Integer.parseInt(System.getenv("delay"));
-            }
-
             String source = FileUtils.readFileToString(new File(args[0]));
             JSONObject config = new JSONObject(source);
-            JSONArray jsonBrowsers = (JSONArray) config.get("browsers");
+
+            if(config.has("delay")){
+                delay = Integer.parseInt(config.getString("delay"));
+            }
+            if(config.has("capture_path")){
+                capturePath = config.getString("capture_path");
+            }
+
+            JSONArray jsonBrowsers = new JSONArray("[\"firefox\"]");
+            if(config.has("browsers")){
+                jsonBrowsers = config.getJSONArray("browsers");
+            }
+
             JSONArray entries =  (JSONArray) config.get("tests");
             for(int i = 0;i < jsonBrowsers.length(); i++){
-                runTestsForBrowser(jsonBrowsers.get(i).toString(), delay, entries);
+                runTestsForBrowser(jsonBrowsers.getString(i), delay, entries);
             }
 
         }

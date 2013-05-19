@@ -45,7 +45,7 @@ How do I use it?
 $ java -jar Snaps-1.0-SNAPSHOT.jar /full/path/to/reftests.json
 ```
 
-That's it... it will output some stuff to the command line and let you know what's up.  For example, the sample one provided will output:
+That's it... it will output some stuff to the command line and let you know what's up.  For example, if we added a bunch of browsers to the sample one provided would output:
 
 ```
 -----------------------------------
@@ -80,12 +80,23 @@ Running tests for: chrome
 
 JSON Structure
 ==============
+<<<<<<< HEAD
 The json has two properties, an array of browser names to test against and an array of tests.
 Each test is an object, the only required thing is the path to the test itself (file protocol is just fine).
 If you do not provide the "expected" property (as in the sample in this repo) it will look for "-expected.html" in the same place.
 
 ```
 {
+=======
+The json has three properties, the first two are optional:
+* capture_path is a path where to capture snapshots to during testing. If not provided, snapshots aren't saved.
+* browsers is an array of browser names to test against and an array of tests.  If not provided, it defaults to firefox.  Valid values are: firefox, chrome (see below), opera, safari, and msie (see below).
+* tests is an array of objects the only required thing is the path to the test itself (file protocol is just fine).  If you do not provide the "expected" property (as in the sample in this repo) it will look for "-expected.html" in the same place.
+
+```
+{
+  "capture_path": "/path/to/capture/images/",
+>>>>>>> Adding capturability and default browser
   "browsers": ["firefox", "safari", "opera" ],
   "tests": [
     {

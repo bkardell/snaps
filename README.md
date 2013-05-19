@@ -61,9 +61,9 @@ If you do not provide the "expected" property (as in the sample in this repo) it
 ```
 [
   {
-		"test": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html",
+    "test": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html",
     "expected": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html"
-	}
+  }
 ]
 ```
 

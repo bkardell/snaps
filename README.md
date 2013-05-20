@@ -114,3 +114,22 @@ want to send me a pull - much appreciated.
 
 
 
+Extra Fun: Pixel Perfect Regressions
+====================================
+If you set the capture_path in your reftests, you can then use those captures to regression test against the same original snaps by simply adding a boolean regression property!
+{
+  "capture_path": "/path/to/capture/images/",
+  "regression": true, 
+  "browsers": ["firefox", "safari", "opera" ],
+  "tests": [
+    {
+      "test": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html",
+      "expected": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html"
+    }
+  ]
+}
+```
+
+
+
+

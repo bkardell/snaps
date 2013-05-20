@@ -70,7 +70,7 @@ public class Snaps {
                         byte[] actualShot = getScreenshot(driver, test);
                         byte[] expectedShot;
 
-                        String mangled = test.replaceAll(":", "").replaceAll("/", "_");
+                        String mangled = browserName + "-" + test.replaceAll(":", "").replaceAll("/", "_");
                         if(isRegression){
                             expectedShot = FileUtils.readFileToByteArray(new File(capturePath + "/" + mangled + "-expected.png"));
                         }else{

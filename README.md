@@ -81,10 +81,11 @@ Running tests for: chrome
 JSON Structure Explained
 ==============
 
-The json has three properties, the first two are optional:
-* capture_path is a path where to capture snapshots to during testing. If not provided, snapshots aren't saved.
-* browsers is an array of browser names to test against and an array of tests.  If not provided, it defaults to firefox.  Valid values are: firefox, chrome (see below), opera, safari, and msie (see below).
-* tests is an array of objects the only required thing is the path to the test itself (file protocol is just fine).  If you do not provide the "expected" property (as in the sample in this repo) it will look for "-expected.html" in the same place.
+The json has four properties, the first three are optional (tests is required):
+* *capture_path* is a path where to capture snapshots to during testing. If not provided, snapshots aren't saved.
+* *regression* is a boolean property explained [here](https://github.com/bkardell/snaps#extra-fun-pixel-perfect-regressions). If not provided, it defaults to false.
+* *browsers* is an array of browser names to test against and an array of tests.  If not provided, it defaults to firefox.  Valid values are: firefox, chrome (see below), opera, safari, and msie (see below).
+* **tests** is an array of objects the only required thing is the path to the test itself (file protocol is just fine).  If you do not provide the "expected" property (as in the sample in this repo) it will look for "-expected.html" in the same place.
 
 ```
 {

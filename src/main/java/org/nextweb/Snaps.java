@@ -18,6 +18,7 @@ public class Snaps {
     private static int ct=0;
     private static int delay=1000;
     private static String capturePath;
+    private static boolean isRegression;
 
     private static WebDriver getDriver(String name){
         if(name.equalsIgnoreCase("firefox")){
@@ -66,16 +67,25 @@ public class Snaps {
                         if(o.has("expected")){
                             expected = o.getString("expected");
                         }
-                        byte[] a = getScreenshot(driver, test);
-                        byte[] b = getScreenshot(driver, expected);
+                        byte[] actualShot = getScreenshot(driver, test);
+                        byte[] expectedShot;
 
-                        if(capturePath != null){
-                            ct++;
-                            FileUtils.writeByteArrayToFile(new File(capturePath + "/" + (ct) + "-test.png"), a);
-                            FileUtils.writeByteArrayToFile(new File(capturePath + "/" +  (ct) + "-expected.png"), b);
+                        String mangled = test.replaceAll(":", "").replaceAll("/", "_");
+                        if(isRegression){
+                            expectedShot = FileUtils.readFileToByteArray(new File(capturePath + "/" + mangled + "-expected.png"));
+                        }else{
+                            expectedShot = getScreenshot(driver, expected);
+
                         }
 
-                        boolean areEqual = java.util.Arrays.equals(a, b);
+                        if(capturePath != null){
+                            FileUtils.writeByteArrayToFile(new File(capturePath + "/" + (mangled) + "-test.png"), actualShot);
+                            if(!isRegression){
+                                FileUtils.writeByteArrayToFile(new File(capturePath + "/" +  (mangled) + "-expected.png"), expectedShot);
+                            }
+                        }
+
+                        boolean areEqual = java.util.Arrays.equals(actualShot, expectedShot);
                         if(areEqual){
                             passing.add(test);
                         }else{
@@ -115,6 +125,9 @@ public class Snaps {
             }
             if(config.has("capture_path")){
                 capturePath = config.getString("capture_path");
+            }
+            if(config.has("regression")){
+                isRegression = config.getBoolean("regression");
             }
 
             JSONArray jsonBrowsers = new JSONArray("[\"firefox\"]");

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Snaps by bkardell</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Snaps</h1>
+          <h2>A simple ref test runner for the rest of us.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/bkardell/snaps/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/bkardell/snaps/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/bkardell/snaps" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="snaps" class="anchor" href="#snaps"><span class="octicon octicon-link"></span></a>snaps</h1>
+
+<p>A simple ref test runner for the rest of us.</p>
+
+<h1>
+<a name="whats-all-this-about" class="anchor" href="#whats-all-this-about"><span class="octicon octicon-link"></span></a>What's all this about?</h1>
+
+<p>In order to verify support of CSS (and maybe some small bit of other things) it relies on "reftests".  </p>
+
+<h1>
+<a name="what-the-heck-is-a-reftest" class="anchor" href="#what-the-heck-is-a-reftest"><span class="octicon octicon-link"></span></a>What the heck is a "reftest"?</h1>
+
+<p>Basically, a ref test is something that loads two versions of a Web page - one that uses well-established means to draw the page, and one that uses some new feature (the one you are testing).  It then compares the two visually and if they match, the test passes.</p>
+
+<h1>
+<a name="so-why-write-this" class="anchor" href="#so-why-write-this"><span class="octicon octicon-link"></span></a>So why write this?</h1>
+
+<p>In a nutshell, unless you work for a vendor - it would appear that there is no way for you to run reftests yourself - for you (and apparently W3C too, it is a manual process of visual comparison).  That sucks because we want more people contributing tests for efforts like Test the Web Forward.  If you want to write a series of tests, there's no way for you to just periodically run them and see how browsers are doing.
+That's one use case.  Closer to my heart though is something else: Prollyfills <a href="http://prollyfill.org">The W3C Extensible Web Community Group</a> has a number of efforts to allow developers to extend the Web and propose new standards and/or work
+along side working groups and browser vendors to implement evaluatable or experimental features <em>outside the browser itself</em>.  For CSS, this means we have no way to show tests and that sucks 
+because as something matures, we can <em>totally</em> contribute reftests that working groups and vendors can use for the native implementations <em>before they even start implementing</em> and <em>while we are still standardizing</em>.  This would ensure that 
+use cases are clearly and easily communicated which helps inform and better the specs themselves.</p>
+
+<h1>
+<a name="ok-i-get-it---so-this-runs-w3c-reftests" class="anchor" href="#ok-i-get-it---so-this-runs-w3c-reftests"><span class="octicon octicon-link"></span></a>Ok, I get it - so this runs W3C reftests?</h1>
+
+<p>Yes and no... W3C reftests are a little more complicated in that they contain lots of metadata describing how they are related and reported.  We're going for simple here on the 
+first pass (I wrote this this morning in my hotel room) so this uses a separate file for metadata.  Still, it does the same basic thing and 
+it can easily run/verify the same tests (metadata is non-visual) if you extract the metadata.  More importantly, this sort of thing should 
+make it easy enough for a WG to evaluate and pick it up even if we take it no further - and it allows me to use them for CSS related prollyfills.</p>
+
+<h1>
+<a name="how-do-i-use-it" class="anchor" href="#how-do-i-use-it"><span class="octicon octicon-link"></span></a>How do I use it?</h1>
+
+<ul>
+<li>Download the jar from the /dist directory</li>
+<li>edit the reftests.json or create your own</li>
+<li>invoke it from the command line passing the whole path to that file</li>
+</ul><pre><code>$ java -jar Snaps-1.0-SNAPSHOT.jar /full/path/to/reftests.json
+</code></pre>
+
+<p>That's it... it will output some stuff to the command line and let you know what's up.  For example, if we added a bunch of browsers to the sample one provided would output:</p>
+
+<pre><code>-----------------------------------
+Running tests for: firefox
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html
+1 of 1 passed.
+May 19, 2013 6:10:07 PM org.openqa.selenium.safari.SafariDriverServer start
+INFO: Server started on port 43212
+May 19, 2013 6:10:08 PM org.openqa.selenium.safari.SafariDriverChannelHandler$1 operationComplete
+INFO: Connection opened
+-----------------------------------
+Running tests for: safari
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html
+1 of 1 passed.
+-----------------------------------
+Running tests for: opera
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html
+1 of 1 passed.
+Started ChromeDriver
+port=45546
+version=0.8
+log=/Users/bkardell/projects/java/snaps/target/chromedriver.log
+-----------------------------------
+Running tests for: chrome
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html
+...fetching http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html
+1 of 1 passed.
+</code></pre>
+
+<h1>
+<a name="json-structure-explained" class="anchor" href="#json-structure-explained"><span class="octicon octicon-link"></span></a>JSON Structure Explained</h1>
+
+<p>The json has four properties, the first three are optional (tests is required):</p>
+
+<ul>
+<li>
+<em>capture_path</em> is a path where to capture snapshots to during testing. If not provided, snapshots aren't saved.</li>
+<li>
+<em>regression</em> is a boolean property explained <a href="https://github.com/bkardell/snaps#extra-fun-pixel-perfect-regressions">here</a>. If not provided, it defaults to false.</li>
+<li>
+<em>browsers</em> is an array of browser names to test against and an array of tests.  If not provided, it defaults to firefox.  Valid values are: firefox, chrome (see below), opera, safari, and msie (see below).</li>
+<li>
+<strong>tests</strong> is an array of objects the only required thing is the path to the test itself (file protocol is just fine).  If you do not provide the "expected" property (as in the sample in this repo) it will look for "-expected.html" in the same place.</li>
+</ul><pre><code>{
+  "capture_path": "/path/to/capture/images/",
+  "browsers": ["firefox", "safari", "opera" ],
+  "tests": [
+    {
+      "test": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html",
+      "expected": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html"
+    }
+  ]
+}
+</code></pre>
+
+<h1>
+<a name="a-note-about-browsers" class="anchor" href="#a-note-about-browsers"><span class="octicon octicon-link"></span></a>A note about browsers</h1>
+
+<p>If you want to run chrome (or msie) you'll have a bit more to do.  For chrome, you'll have to <a href="https://code.google.com/p/chromedriver/downloads/list">download the appropriate driver</a> and then set 
+a property:</p>
+
+<pre><code>java -Dwebdriver.chrome.driver=/full/path/to/chromedriver2_mac32_0.8/chromedriver -jar Snaps-1.0-SNAPSHOT.jar  /full/path/to/reftests.json
+</code></pre>
+
+<p>Unfortunately, I don't have a PC handy, so the code support is there for MSIE, but I dont have testable instructions on how to set up the driver.  If you
+want to send me a pull - much appreciated.</p>
+
+<h1>
+<a name="extra-fun-pixel-perfect-regressions" class="anchor" href="#extra-fun-pixel-perfect-regressions"><span class="octicon octicon-link"></span></a>Extra Fun: Pixel Perfect Regressions</h1>
+
+<p>If you set the capture_path in your reftests, you can then use those captures to regression test against by simply adding a boolean regression property!</p>
+
+<pre><code>{
+  "capture_path": "/path/to/capture/images/",
+  "regression": true, 
+  "browsers": ["firefox", "safari", "opera" ],
+  "tests": [
+    {
+      "test": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links.html",
+      "expected": "http://bkardell.github.io/selectors-L4-link-prollyfills/examples/local/local-links-expected.html"
+    }
+  ]
+}
+</code></pre>
+        </section>
+
+        <footer>
+          Snaps is maintained by <a href="https://github.com/bkardell">bkardell</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
